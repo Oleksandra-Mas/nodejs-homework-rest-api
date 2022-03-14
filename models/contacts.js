@@ -41,7 +41,7 @@ const updateContact = async (contactId, body) => {
   if (contactIdx === -1) {
     return null;
   }
-  const updatedContact = { ...body, id: contactId };
+  const updatedContact = { ...contacts[contactIdx], id: contactId, ...body };
   contacts.splice(contactIdx, 1, updatedContact);
   await fs.writeFile(contactsPath, JSON.stringify(contacts));
   return updatedContact;
