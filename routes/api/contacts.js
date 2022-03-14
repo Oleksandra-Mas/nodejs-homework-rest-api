@@ -3,20 +3,20 @@ const express = require('express');
 const router = express.Router();
 
 const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-} = require('../../models/contacts');
+  getAll,
+  getById,
+  remove,
+  add,
+  update,
+} = require('../../controllers/contacts');
 
 router.get('/', async (req, res, next) => {
-  const contacts = await listContacts();
+  const contacts = await getAll();
   res.json({ contacts }).status(200);
 });
 
 router.get('/:contactId', async (req, res, next) => {
-  const contact = await getContactById(req.params.contactId);
+  const contact = await getById(req.params.contactId);
   if (!contact) {
     return res.status(404).send({ message: 'Not found' });
   }
@@ -28,12 +28,16 @@ router.post('/', async (req, res, next) => {
   if (!body.name || !body.email || !body.phone) {
     return res.status(400).send({ message: 'missing required name field' });
   }
-  const contact = await addContact(body);
-  res.json({ ...contact }).status(201);
+  try {
+    const contact = await add(body);
+    res.json({ ...contact }).status(201);
+  } catch (err) {
+    return res.status(400).send({ message: err.message });
+  }
 });
 
 router.delete('/:contactId', async (req, res, next) => {
-  const contact = await removeContact(req.params.contactId);
+  const contact = await remove(req.params.contactId);
   if (!contact) {
     return res.status(404).send({ message: 'Not found' });
   }
@@ -45,11 +49,15 @@ router.put('/:contactId', async (req, res, next) => {
   if (!body.name && !body.email && !body.phone) {
     return res.status(400).send({ message: 'missing required fields' });
   }
-  const contact = await updateContact(params.contactId, body);
-  if (!contact) {
-    return res.status(404).send({ message: 'Not found' });
+  try {
+    const contact = await update(params.contactId, body);
+    if (!contact) {
+      return res.status(404).send({ message: 'Not found' });
+    }
+    res.json({ ...contact }).status(200);
+  } catch (err) {
+    return res.status(400).send({ message: err.message });
   }
-  res.json({ ...contact }).status(200);
 });
 
 module.exports = router;
