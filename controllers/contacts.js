@@ -25,19 +25,18 @@ const getById = async (req, res, next) => {
   try {
     const result = await service.getContactById(contactId)[0]
     if (result) {
-      res.json({
+      return res.json({
         status: 'success',
         code: 200,
         data: { contact: result },
       })
-    } else {
+    }
       res.status(404).json({
         status: 'error',
         code: 404,
         message: `Not found contact id: ${contactId}`,
         data: 'Not Found',
-      })
-    }
+      });
   } catch ({message}) {
     res.status(400).json({
       status: 'error',
@@ -107,19 +106,19 @@ const update = async (req, res, next) => {
   try {
     const result = await service.updateContact(params.contactId, req.body)
     if (result) {
-      res.json({
+      return res.json({
         status: 'success',
         code: 200,
         data: { contact: result },
-      })
-    } else {
+      });
+    }
       res.status(404).json({
         status: 'error',
         code: 404,
         message: `Not found contact id: ${params.contactId}`,
         data: 'Not Found',
       })
-    }
+    
   } catch ({message}) {
     return res.status(400).json({
       status: 'error',
@@ -156,19 +155,18 @@ const updateStatusContact = async (req, res, next) => {
   try {
     const result = await service.updateContact(contactId, { favorite })
     if (result) {
-      res.json({
+      return res.json({
         status: 'success',
         code: 200,
         data: { contact: result },
       })
-    } else {
+    }
       res.status(404).json({
         status: 'error',
         code: 404,
         message: `Not found contact id: ${contactId}`,
         data: 'Not Found',
       })
-    }
   } catch ({message}) {
     return res.status(400).json({
       status: 'error',
@@ -184,19 +182,18 @@ const remove = async (req, res, next) => {
   try {
     const result = await service.removeContact(contactId)
     if (result) {
-      res.json({
+      return res.json({
         status: 'success',
         code: 200,
         data: { task: result },
       })
-    } else {
+    }
       res.status(404).json({
         status: 'error',
         code: 404,
         message: `Not found contact id: ${contactId}`,
         data: 'Not Found',
       })
-    }
   } catch ({message}) {
     return res.status(400).json({
       status: 'error',
