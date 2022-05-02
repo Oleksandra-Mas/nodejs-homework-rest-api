@@ -1,23 +1,10 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-const { userSchema } = require('../service/schemas/users');
 const { getUserByEmail, registerUser, getUserByEmailAndPassword, updateToken } = require('../service/user');
 
 const register = async (req, res, next) => {
     try {
         const { body } = req;
-
-        const validation = userSchema.validate(body);
-
-        if (validation.error) {
-            const errorMessage = validation.error.details[0].message;
-            return res.status(400).json({
-              status: 'error',
-              code: 400,
-              message: errorMessage,
-            });
-        }
-        
         const user = await getUserByEmail(body.email);
         if (user) {
             return res.status(409).json({
@@ -52,17 +39,6 @@ const register = async (req, res, next) => {
 const login = async (req, res, next) => {
     try {
         const { body } = req;
-        const validation = userSchema.validate(body);
-
-        if (validation.error) {
-            const errorMessage = validation.error.details[0].message;
-            return res.status(400).json({
-              status: 'error',
-              code: 400,
-              message: errorMessage,
-            });
-        }
-        
         const user = await getUserByEmailAndPassword(body);
         if (!user) {
             return res.status(401).json({
