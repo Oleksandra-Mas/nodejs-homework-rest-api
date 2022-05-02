@@ -9,7 +9,7 @@ const authMiddleware = async (req, res, next) => {
       next( createError(401, 'Not authorized'));
     }
 
-    const [, token] = authorization.split(' ');
+    const token = authorization.split(' ')[1];
 
     if (!token) {
       next( createError(401, 'Not authorized'));
