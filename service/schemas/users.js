@@ -13,7 +13,8 @@ const userSchema = Joi.object({
 
     token: Joi.string(),
         
-    subscription: Joi.string().default("starter").valid("starter", "pro", "business"),
+  subscription: Joi.string().default("starter").valid("starter", "pro", "business"),
+  avatarURL: Joi.string
 });
 
 const user = new Schema(
@@ -32,7 +33,8 @@ const user = new Schema(
           enum: ["starter", "pro", "business"],
           default: "starter"
         },
-        token: String
+    token: String,
+    avatarURL: String
       },
     { versionKey: false, timestamps: true }
   );
