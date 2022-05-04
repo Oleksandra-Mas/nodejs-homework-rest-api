@@ -16,19 +16,26 @@ const getUserByEmailAndPassword = async ({ email, password }) => {
 const registerUser = async (data) => {
     const { password } = data;
     const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-    const user = User.create({...data, password:hashPassword});
+    const user = await User.create({ ...data, password: hashPassword });
+    console.log(user);
     return user;
 }
 
 const updateToken = async (data) => {
     const { user, token } = data;
-    const res = User.findByIdAndUpdate({ _id: user.id }, {...User.user, token}, { new: true }).select({ "password": 0 });
+    const res = User.findByIdAndUpdate({ _id: user.id }, { token}, { new: true }).select({ "password": 0 });
     return res;
+}
+
+const changeAvatar = async (data) => {
+    const { user, avatarUrl } = data;
+    await User.findByIdAndUpdate({ _id: user.id }, { avatarURL:avatarUrl }, { new: true });
 }
 
 module.exports = {
     getUserByEmail,
     registerUser,
     getUserByEmailAndPassword,
-    updateToken
+    updateToken,
+    changeAvatar
 }
