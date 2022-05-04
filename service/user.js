@@ -17,7 +17,6 @@ const registerUser = async (data) => {
     const { password } = data;
     const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
     const user = await User.create({ ...data, password: hashPassword });
-    console.log(user);
     return user;
 }
 
