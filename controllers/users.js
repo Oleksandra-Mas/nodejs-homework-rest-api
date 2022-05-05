@@ -3,8 +3,10 @@ const gravatar = require('gravatar');
 require('dotenv').config();
 const fs = require('fs/promises')
 const Jimp = require('jimp');
+const { v4: uuidv4 } = require('uuid');
 
-const { getUserByEmail, registerUser, getUserByEmailAndPassword, updateToken, changeAvatar } = require('../service/user');
+const sendEmail = require('../helpers/sendGrid');
+const { getUserByEmail, registerUser, getUserByEmailAndPassword, updateToken, changeAvatar, findByVerificationToken, updateVerificationToken } = require('../service/user');
 const {addToAvatarsPath} = require('../helpers/path')
 
 const register = async (req, res, next) => {
@@ -19,8 +21,13 @@ const register = async (req, res, next) => {
             });
         }
 
-        const avatarURL = gravatar.url(body.email, {protocol: 'http', s: '100'});
-        const created = await registerUser({...body, avatarURL});
+        const avatarURL = gravatar.url(body.email, { protocol: 'http', s: '100' });
+
+        const verificationToken = uuidv4();
+        const created = await registerUser({ ...body, avatarURL, verificationToken });
+        
+        const email = { to: created.email, subject: 'Verification', html: `<p>/users/verify/${verificationToken}<p/>` };
+        await sendEmail(email);
 
         const token = jwt.sign({id:created._id}, process.env.SECRET_KEY, {expiresIn:'10h'});
         const result = await updateToken({ token, user: created });
@@ -51,6 +58,14 @@ const login = async (req, res, next) => {
               status: 'error',
               code: 401,
               message: "Email or password is wrong",
+            });
+        }
+
+        if (!user.verify) {
+            return res.status(401).json({
+              status: 'error',
+              code: 401,
+              message: "Email was not verified",
             });
         }
 
@@ -132,12 +147,64 @@ const updateAvatar = async (req, res, next) => {
           message,
         });
       }
- }
+}
+ 
+const getByVerificationToken = async (req, res, next) => {
+    try {
+        const { verificationToken } = req.params;
+        const user = await findByVerificationToken(verificationToken);
+        if (!user) {
+            return res.status(404).json({
+                status: "error",
+                code: 404,
+                message: 'User not found'
+            });
+        }
+
+        updateVerificationToken(user.id);
+
+        res.status(200).json({
+        status: "success",
+        code: 200,
+        message: 'Verification successful',
+    });
+     }
+     catch ({message}) {
+         res.status(400).json({
+          status: 'error',
+          code: 400,
+          message,
+        });
+      }
+}
+ 
+const resendVerificationToken = async (req, res, next) => {
+    try {
+        const { email:mail } = req.body;
+        const email = { to: mail, subject: 'Verification', html: `<p>/users/verify/${req.verificationToken}<p/>` };
+        await sendEmail(email);
+
+        res.status(200).json({
+        status: "success",
+        code: 200,
+        message: 'Verification successful',
+    });
+     }
+     catch ({message}) {
+         res.status(400).json({
+          status: 'error',
+          code: 400,
+          message,
+        });
+      }
+}
 
 module.exports = {
     register,
     login,
     logout,
     getCurrent,
-    updateAvatar
+    updateAvatar,
+    getByVerificationToken,
+    resendVerificationToken
 }

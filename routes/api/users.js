@@ -4,7 +4,7 @@ const router = express.Router()
 
 const usersController = require('../../controllers/users')
 const { authMiddleware } = require('../../middlewares/authMiddleware')
-const { userValidationMiddleware } = require('../../middlewares/validationMiddleware')
+const { userValidationMiddleware, resendTokenValidationMiddleware } = require('../../middlewares/validationMiddleware')
 const {upload} = require('../../middlewares/fileMiddleware')
     
 
@@ -17,5 +17,7 @@ router.post('/logout', authMiddleware, usersController.logout)
 
 router.get('/current', authMiddleware, usersController.getCurrent)
 
-router.patch('/avatars', authMiddleware,upload.single('avatar'), usersController.updateAvatar)
+router.patch('/avatars', authMiddleware, upload.single('avatar'), usersController.updateAvatar)
+router.get('/verify/:verificationToken', usersController.getByVerificationToken)
+router.post('/verify', resendTokenValidationMiddleware, usersController.resendVerificationToken)
 module.exports = router

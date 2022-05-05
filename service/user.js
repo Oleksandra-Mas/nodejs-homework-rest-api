@@ -5,6 +5,10 @@ const getUserByEmail = async (email) => {
     return User.findOne({ email });
 }
 
+const findByVerificationToken = async (verificationToken) => {
+    return User.findOne({ verificationToken });
+}
+
 const getUserByEmailAndPassword = async ({ email, password }) => {
     const user = await getUserByEmail(email);
     if (!user || !bcrypt.compareSync(password, user.password)) {
@@ -31,10 +35,17 @@ const changeAvatar = async (data) => {
     await User.findByIdAndUpdate({ _id: user.id }, { avatarURL:avatarUrl }, { new: true });
 }
 
+const updateVerificationToken = async (_id) => {
+    const res = User.findByIdAndUpdate({ _id }, { verificationToken:null, verify:true }, { new: true });
+    return res;
+}
+
 module.exports = {
     getUserByEmail,
     registerUser,
     getUserByEmailAndPassword,
     updateToken,
-    changeAvatar
+    changeAvatar,
+    findByVerificationToken,
+    updateVerificationToken
 }
