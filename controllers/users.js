@@ -1,6 +1,11 @@
 const jwt = require('jsonwebtoken');
+const gravatar = require('gravatar');
 require('dotenv').config();
-const { getUserByEmail, registerUser, getUserByEmailAndPassword, updateToken } = require('../service/user');
+const fs = require('fs/promises')
+const Jimp = require('jimp');
+
+const { getUserByEmail, registerUser, getUserByEmailAndPassword, updateToken, changeAvatar } = require('../service/user');
+const {addToAvatarsPath} = require('../helpers/path')
 
 const register = async (req, res, next) => {
     try {
@@ -14,7 +19,8 @@ const register = async (req, res, next) => {
             });
         }
 
-        const created = await registerUser(body);
+        const avatarURL = gravatar.url(body.email, {protocol: 'http', s: '100'});
+        const created = await registerUser({...body, avatarURL});
 
         const token = jwt.sign({id:created._id}, process.env.SECRET_KEY, {expiresIn:'10h'});
         const result = await updateToken({ token, user: created });
@@ -100,11 +106,38 @@ const getCurrent = async (req, res, next) => {
           message,
         });
       }
+}
+ 
+const updateAvatar = async (req, res, next) => {
+    const { user, file } = req;
+    const { path:filePath, originalname } = file;
+    try {
+        const image = await Jimp.read(filePath);
+        const {newPath, avatarUrl} = addToAvatarsPath(originalname);
+        image.resize(250, 250).write(newPath);
+        changeAvatar({user,avatarUrl});
+        res.status(200).json({
+        status: "success",
+        code: 200,
+        data: {
+            "avatarURL": avatarUrl
+        }
+    });
+     }
+    catch ({ message }) {
+        fs.unlink(filePath);
+         res.status(400).json({
+          status: 'error',
+          code: 400,
+          message,
+        });
+      }
  }
 
 module.exports = {
     register,
     login,
     logout,
-    getCurrent
+    getCurrent,
+    updateAvatar
 }
