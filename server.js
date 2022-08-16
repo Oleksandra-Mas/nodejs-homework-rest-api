@@ -10,9 +10,11 @@ const connection = mongoose.connect(uriDb, {
   useUnifiedTopology: true,
 });
 
+let server;
+
 connection
   .then(() => {
-    app.listen(PORT, function () {
+     server = app.listen(PORT, function () {
       console.log(`Server running. Use our API on port: ${PORT}`);
     });
   })
@@ -20,4 +22,11 @@ connection
     console.log(`Server not running. Error message: ${err.message}`),
 );
 
-module.exports = app
+const closeConnection = () => {
+  mongoose.connection.close();
+  if(server){
+    server.close();
+  }
+}
+
+module.exports = {app, closeConnection}

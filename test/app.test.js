@@ -1,7 +1,7 @@
 const request = require('supertest')
-const { describe, test, expect } = require('@jest/globals');
+const { describe, test, expect, afterEach, afterAll } = require('@jest/globals');
 
-const app = require('../server');
+const {app, closeConnection} = require('../server');
 
 const userRegistrationData = {
   email : "test12@qqq.com",
@@ -46,11 +46,18 @@ describe('resister /users', () => {
       .toBe(200);
   });
 
-  test('login with not existing data', async () => {
+  test('login with not existing data', async() => {
     const response = await request(app).post('/api/users/login').send(userWithNotExistingData);
     const { statusCode } = response;
     expect(statusCode)
       .toBe(401);
-  });
+     });
+})
 
+afterEach((done) => {
+  done();
+})
+
+afterAll(() => {
+  closeConnection();
 })
