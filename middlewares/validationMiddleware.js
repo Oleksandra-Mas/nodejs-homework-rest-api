@@ -33,5 +33,5 @@ const contactValidationMiddleware = async (req, _, next) => {
 };
 module.exports = {
   userValidationMiddleware,
-  contactValidationMiddleware
+  contactValidationMiddleware,
 };
