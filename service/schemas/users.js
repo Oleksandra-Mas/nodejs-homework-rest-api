@@ -1,7 +1,7 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const Joi = require('joi')
+const Joi = require('joi');
 
 const userSchema = Joi.object({
   password: Joi.string().alphanum().min(6).max(15).required(),
@@ -18,7 +18,7 @@ const userSchema = Joi.object({
     .default('starter')
     .valid('starter', 'pro', 'business'),
   avatarURL: Joi.string,
-})
+});
 
 const user = new Schema(
   {
@@ -40,8 +40,8 @@ const user = new Schema(
     avatarURL: String,
   },
   { versionKey: false, timestamps: true }
-)
+);
 
-const User = mongoose.model('user', user)
+const User = mongoose.model('user', user);
 
-module.exports = { User, userSchema }
+module.exports = { User, userSchema };

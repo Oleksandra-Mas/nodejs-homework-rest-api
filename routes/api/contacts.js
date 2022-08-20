@@ -1,25 +1,29 @@
-const express = require('express')
+const express = require('express');
 
-const router = express.Router()
+const router = express.Router();
 
-const contactController = require('../../controllers/contacts')
-const { authMiddleware } = require('../../middlewares/authMiddleware')
+const contactController = require('../../controllers/contacts');
+const { authMiddleware } = require('../../middlewares/authMiddleware');
 const {
   contactValidationMiddleware,
-} = require('../../middlewares/validationMiddleware')
+} = require('../../middlewares/validationMiddleware');
 
-router.use(authMiddleware)
+router.use(authMiddleware);
 
-router.get('/', contactController.get)
+router.get('/', contactController.get);
 
-router.get('/:contactId', contactController.getById)
+router.get('/:contactId', contactController.getById);
 
-router.post('/', contactValidationMiddleware, contactController.create)
+router.post('/', contactValidationMiddleware, contactController.create);
 
-router.delete('/:contactId', contactController.remove)
+router.delete('/:contactId', contactController.remove);
 
-router.put('/:contactId', contactValidationMiddleware, contactController.update)
+router.put(
+  '/:contactId',
+  contactValidationMiddleware,
+  contactController.update
+);
 
-router.patch('/:contactId/favorite', contactController.updateStatusContact)
+router.patch('/:contactId/favorite', contactController.updateStatusContact);
 
-module.exports = router
+module.exports = router;

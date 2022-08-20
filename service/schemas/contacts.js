@@ -1,7 +1,7 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const Joi = require('joi')
+const Joi = require('joi');
 
 const contactSchema = Joi.object({
   name: Joi.string().alphanum().min(10).max(30),
@@ -16,11 +16,11 @@ const contactSchema = Joi.object({
     .max(30),
 
   favorite: Joi.boolean(),
-})
+});
 
 const contactFavoriteSchema = Joi.object({
   favorite: Joi.boolean(),
-})
+});
 
 const contact = new Schema(
   {
@@ -48,8 +48,8 @@ const contact = new Schema(
     },
   },
   { versionKey: false, timestamps: true }
-)
+);
 
-const Contact = mongoose.model('contact', contact)
+const Contact = mongoose.model('contact', contact);
 
-module.exports = { Contact, contactSchema, contactFavoriteSchema }
+module.exports = { Contact, contactSchema, contactFavoriteSchema };
