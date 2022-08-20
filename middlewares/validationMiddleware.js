@@ -48,7 +48,7 @@ const resendTokenValidationMiddleware = async (req, _, next) => {
     error.status = 400;
     next(error);
   }
-  
+
   if (user?.verify) {
     const error = new Error('Verification has already been passed');
     error.status = 400;
@@ -62,5 +62,5 @@ const resendTokenValidationMiddleware = async (req, _, next) => {
 module.exports = {
   userValidationMiddleware,
   contactValidationMiddleware,
-  resendTokenValidationMiddleware
+  resendTokenValidationMiddleware,
 };
