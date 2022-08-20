@@ -5,6 +5,10 @@ const getUserByEmail = async (email) => {
   return User.findOne({ email });
 };
 
+const findByVerificationToken = async (verificationToken) => {
+  return User.findOne({ verificationToken });
+};
+
 const deleteUserByEmail = async (email) => {
   return User.deleteOne({ email });
 };
@@ -43,11 +47,22 @@ const changeAvatar = async (data) => {
   );
 };
 
+const updateVerificationToken = async (_id) => {
+  const res = User.findByIdAndUpdate(
+    { _id },
+    { verificationToken: null, verify: true },
+    { new: true }
+  );
+  return res;
+};
+
 module.exports = {
   getUserByEmail,
   registerUser,
   getUserByEmailAndPassword,
   updateToken,
   changeAvatar,
+  findByVerificationToken,
+  updateVerificationToken,
   deleteUserByEmail,
 };

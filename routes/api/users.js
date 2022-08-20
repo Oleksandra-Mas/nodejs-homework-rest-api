@@ -6,6 +6,7 @@ const usersController = require('../../controllers/users');
 const { authMiddleware } = require('../../middlewares/authMiddleware');
 const {
   userValidationMiddleware,
+  resendTokenValidationMiddleware,
 } = require('../../middlewares/validationMiddleware');
 const { upload } = require('../../middlewares/fileMiddleware');
 
@@ -23,4 +24,15 @@ router.patch(
   upload.single('avatar'),
   usersController.updateAvatar
 );
+
+router.get(
+  '/verify/:verificationToken',
+  usersController.getByVerificationToken
+);
+router.post(
+  '/verify',
+  resendTokenValidationMiddleware,
+  usersController.resendVerificationToken
+);
+
 module.exports = router;
