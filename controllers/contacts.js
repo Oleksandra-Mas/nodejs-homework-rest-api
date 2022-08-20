@@ -1,5 +1,5 @@
-const service = require('../service/contact');
-const { contactFavoriteSchema } = require('../service/schemas/contacts');
+const service = require('../service/contact')
+const { contactFavoriteSchema } = require('../service/schemas/contacts')
 
 const get = async (req, res, next) => {
   try {
@@ -10,13 +10,13 @@ const get = async (req, res, next) => {
       data: {
         contacts: results,
       },
-    }) 
-  } catch ({message}) {
-     res.status(400).json({
+    })
+  } catch ({ message }) {
+    res.status(400).json({
       status: 'error',
       code: 400,
       message,
-    });
+    })
   }
 }
 
@@ -31,42 +31,42 @@ const getById = async (req, res, next) => {
         data: { contact: result },
       })
     }
-      res.status(404).json({
-        status: 'error',
-        code: 404,
-        message: `Not found contact id: ${contactId}`,
-        data: 'Not Found',
-      });
-  } catch ({message}) {
+    res.status(404).json({
+      status: 'error',
+      code: 404,
+      message: `Not found contact id: ${contactId}`,
+      data: 'Not Found',
+    })
+  } catch ({ message }) {
     res.status(400).json({
       status: 'error',
       code: 400,
       message,
-    });
+    })
   }
 }
 
 const create = async (req, res, next) => {
-  const { body } = req; 
+  const { body } = req
   try {
-    const result = await service.createContact({favorite:false, ...body})
+    const result = await service.createContact({ favorite: false, ...body })
 
     res.status(201).json({
       status: 'success',
       code: 201,
       data: { contact: result },
     })
-  } catch ({message}) {
+  } catch ({ message }) {
     return res.status(400).json({
       status: 'error',
       code: 400,
       message,
-    });
+    })
   }
 }
 
 const update = async (req, res, next) => {
-  const { body, params } = req;
+  const { body, params } = req
   try {
     const result = await service.updateContact(params.contactId, body)
     if (result) {
@@ -74,21 +74,20 @@ const update = async (req, res, next) => {
         status: 'success',
         code: 200,
         data: { contact: result },
-      });
-    }
-      res.status(404).json({
-        status: 'error',
-        code: 404,
-        message: `Not found contact id: ${params.contactId}`,
-        data: 'Not Found',
       })
-    
-  } catch ({message}) {
+    }
+    res.status(404).json({
+      status: 'error',
+      code: 404,
+      message: `Not found contact id: ${params.contactId}`,
+      data: 'Not Found',
+    })
+  } catch ({ message }) {
     return res.status(400).json({
       status: 'error',
       code: 400,
       message,
-    });
+    })
   }
 }
 
@@ -96,24 +95,24 @@ const updateStatusContact = async (req, res, next) => {
   const { contactId } = req.params
   const { favorite = false } = req.body
 
-  if (!favorite && favorite!==false) {
+  if (!favorite && favorite !== false) {
     return res.status(400).json({
       status: 'error',
       code: 400,
       message: 'missing required field',
       data: 'Not Found',
-    });
+    })
   }
 
-  const validation = contactFavoriteSchema.validate(req.body);
+  const validation = contactFavoriteSchema.validate(req.body)
 
   if (validation.error) {
-        const errorMessage = validation.error.details[0].message;
-        return res.status(400).json({
-          status: 'error',
-          code: 400,
-          message: errorMessage,
-        });;
+    const errorMessage = validation.error.details[0].message
+    return res.status(400).json({
+      status: 'error',
+      code: 400,
+      message: errorMessage,
+    })
   }
 
   try {
@@ -125,18 +124,18 @@ const updateStatusContact = async (req, res, next) => {
         data: { contact: result },
       })
     }
-      res.status(404).json({
-        status: 'error',
-        code: 404,
-        message: `Not found contact id: ${contactId}`,
-        data: 'Not Found',
-      })
-  } catch ({message}) {
+    res.status(404).json({
+      status: 'error',
+      code: 404,
+      message: `Not found contact id: ${contactId}`,
+      data: 'Not Found',
+    })
+  } catch ({ message }) {
     return res.status(400).json({
       status: 'error',
       code: 400,
       message,
-    });
+    })
   }
 }
 
@@ -152,18 +151,18 @@ const remove = async (req, res, next) => {
         data: { task: result },
       })
     }
-      res.status(404).json({
-        status: 'error',
-        code: 404,
-        message: `Not found contact id: ${contactId}`,
-        data: 'Not Found',
-      })
-  } catch ({message}) {
+    res.status(404).json({
+      status: 'error',
+      code: 404,
+      message: `Not found contact id: ${contactId}`,
+      data: 'Not Found',
+    })
+  } catch ({ message }) {
     return res.status(400).json({
       status: 'error',
       code: 400,
       message,
-    });
+    })
   }
 }
 
