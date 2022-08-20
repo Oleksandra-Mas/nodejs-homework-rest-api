@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const Joi = require('joi');
 
 const contactSchema = Joi.object({
-  name: Joi.string().alphanum().min(10).max(30),
+  name: Joi.string().alphanum().min(5).max(30),
 
   phone: Joi.string()
     .min(10)
@@ -26,7 +26,7 @@ const contact = new Schema(
   {
     name: {
       type: String,
-      minlength: 10,
+      minlength: 5,
       maxlength: 30,
     },
     phone: {
