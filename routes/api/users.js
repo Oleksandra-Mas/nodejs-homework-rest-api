@@ -24,6 +24,7 @@ router.patch(
   upload.single('avatar'),
   usersController.updateAvatar
 );
+
 router.get(
   '/verify/:verificationToken',
   usersController.getByVerificationToken
@@ -33,4 +34,5 @@ router.post(
   resendTokenValidationMiddleware,
   usersController.resendVerificationToken
 );
+
 module.exports = router;

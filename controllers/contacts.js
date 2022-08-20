@@ -49,10 +49,7 @@ const getById = async (req, res, next) => {
 const create = async (req, res, next) => {
   const { body } = req;
   try {
-    const result = await service.createContact({
-      favorite: false,
-      ...body,
-    });
+    const result = await service.createContact({ favorite: false, ...body });
 
     res.status(201).json({
       status: 'success',

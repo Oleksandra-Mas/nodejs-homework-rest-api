@@ -5,7 +5,9 @@ const fs = require('fs/promises');
 const Jimp = require('jimp');
 const { v4: uuidv4 } = require('uuid');
 
+
 const sendEmail = require('../helpers/sendGrid');
+
 const {
   getUserByEmail,
   registerUser,
@@ -69,6 +71,7 @@ const register = async (req, res, next) => {
   }
 };
 
+
 const login = async (req, res, next) => {
   try {
     const { body } = req;
@@ -109,6 +112,7 @@ const login = async (req, res, next) => {
     });
   }
 };
+
 
 const logout = async (req, res, next) => {
   try {

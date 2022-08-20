@@ -9,6 +9,10 @@ const findByVerificationToken = async (verificationToken) => {
   return User.findOne({ verificationToken });
 };
 
+const deleteUserByEmail = async (email) => {
+  return User.deleteOne({ email });
+};
+
 const getUserByEmailAndPassword = async ({ email, password }) => {
   const user = await getUserByEmail(email);
   if (!user || !bcrypt.compareSync(password, user.password)) {
@@ -60,4 +64,5 @@ module.exports = {
   changeAvatar,
   findByVerificationToken,
   updateVerificationToken,
+  deleteUserByEmail,
 };
