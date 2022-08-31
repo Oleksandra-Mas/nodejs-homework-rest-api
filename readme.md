@@ -9,6 +9,7 @@
 - joi
 - jsonwebtoken
 - multer
+- jimp
 
 ### Commands:
 
