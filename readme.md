@@ -1,31 +1,20 @@
-## GoIT Node.js Course Template Homework
+## GoIT Node.js Homework
 
-Выполните форк этого репозитория для выполнения домашних заданий (2-6)
-Форк создаст репозиторий на вашем http://github.com
+### Stack:
 
-Добавьте ментора в коллаборацию
+- javascript
+- express
+- sendgrid
+- bcryptjs
+- joi
+- jsonwebtoken
+- multer
+- jimp
 
-Для каждой домашней работы создавайте свою ветку.
+### Commands:
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
-
-Каждая новая ветка для дз должна делаться с master
-
-После того как вы закончили выполнять домашнее задание в своей ветке, необходимо сделать пулл-реквест (PR). Потом добавить ментора для ревью кода. Только после того как ментор заапрувит PR, вы можете выполнить мердж ветки с домашним заданием в мастер.
-
-Внимательно читайте комментарии ментора. Исправьте замечания и сделайте коммит в ветке с домашним заданием. Изменения подтянуться в PR автоматически после того как вы отправите коммит с исправлениями на github
-После исправления снова добавьте ментора на ревью кода.
-
-- При сдаче домашней работы есть ссылка на PR
-- JS-код чистый и понятный, для форматирования используется Prettier
-
-### Команды:
-
-- `npm start` &mdash; старт сервера в режиме production
-- `npm run start:dev` &mdash; старт сервера в режиме разработки (development)
-- `npm run lint` &mdash; запустить выполнение проверки кода с eslint, необходимо выполнять перед каждым PR и исправлять все ошибки линтера
-- `npm lint:fix` &mdash; та же проверка линтера, но с автоматическими исправлениями простых ошибок
+- `npm start` &mdash; start the server in production mode
+- `npm run start:dev` &mdash; start the server in development mode
+- `npm run lint` &mdash; run code check execution with eslint, must be performed before each PR and fix all linter errors
+- `npm lint:fix` &mdash; same linter check, but with automatic fixes for simple errors
+- `npm test` &mdash; runs tests for registration and login
